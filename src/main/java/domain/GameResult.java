@@ -7,17 +7,17 @@ public enum GameResult {
 
     private final String name;
 
+    public GameResult reverse() {
+        if(this == WIN) return GameResult.LOSE;
+        if(this == LOSE) return GameResult.WIN;
+        return GameResult.DRAW;
+    }
+
     GameResult(String name) {
         this.name = name;
     }
 
     public String getName() {
         return name;
-    }
-
-    public GameResult reverse() {
-        if(this == WIN) return GameResult.LOSE;
-        if(this == LOSE) return GameResult.WIN;
-        return GameResult.DRAW;
     }
 }

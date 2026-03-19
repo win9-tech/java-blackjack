@@ -33,21 +33,19 @@ public class BlackjackGame {
         }
     }
 
-    public List<Player> getBlackjackPlayers() {
-        return this.players.getBlackjackPlayers();
-    }
-
     public void determineResult() {
-        int dealerScore = dealer.calculateScore();
-        boolean dealerBurst = dealer.isBurst(dealerScore);
+        HandResult dealerHand = new HandResult(dealer);
 
         for (Player player : players.getPlayers()) {
-            int userScore = player.calculateScore();
-            boolean userBurst = player.isBurst(userScore);
-            GameResult userResult = judge(player.isBlackjack(), dealer.isBlackjack(), userScore, dealerScore, userBurst, dealerBurst);
+            HandResult playerHand = new HandResult(player);
+            GameResult userResult = GameRule.judge(playerHand, dealerHand);
             player.setGameResult(userResult);
             dealer.setRounds(userResult.reverse());
         }
+    }
+
+    public List<Player> getBlackjackPlayers() {
+        return this.players.getBlackjackPlayers();
     }
 
     public Dealer getDealer() {
@@ -56,16 +54,5 @@ public class BlackjackGame {
 
     public List<Player> getPlayers() {
         return players.getPlayers();
-    }
-
-    private GameResult judge(boolean userIsBlackjack, boolean dealerIsBlackjack, int userScore, int dealerScore, boolean userBurst, boolean dealerBurst) {
-        if(userIsBlackjack && dealerIsBlackjack) return GameResult.DRAW;
-        if(userIsBlackjack) return GameResult.WIN;
-        if(dealerIsBlackjack) return GameResult.LOSE;
-        if (userBurst) return GameResult.LOSE;
-        if (dealerBurst) return GameResult.WIN;
-        if (userScore > dealerScore) return GameResult.WIN;
-        if (userScore < dealerScore) return GameResult.LOSE;
-        return GameResult.DRAW;
     }
 }
